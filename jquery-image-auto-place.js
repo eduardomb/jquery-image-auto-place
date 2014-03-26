@@ -8,7 +8,7 @@
 * and so on.
 *
 * Usage Example:
-*   <div id="#content">
+*   <div id="content">
 *     <img style="width: 200px; height: 100px; border: 1px;" src="" alt="" />
 *     <img style="width: 200px; height: 100px; border: 1px;" src="" alt="" />
 *     <img style="width: 200px; height: 100px; border: 1px;" src="" alt="" />
@@ -20,7 +20,7 @@
 *   </div>
 *
 *   <script type="text/javascript">
-*     $('#text').imageAutoPlace();
+*     $('#content').imageAutoPlace();
 *   </script>
 *
 * The above example will rearrange the images to the following layout:
@@ -42,64 +42,75 @@
 *
 */
 (function($){
-  $.fn.imageAutoPlace = function(offset) {
-    var words = this.text().match(/([^ ]+)/g),
-        next_height = 0,
-        side = 'left',
-        imgs = [];
+  'use strict';
 
-    // Define the default offset.
-    offset = offset === undefined ? 200 : offset;
+  $.fn.imageAutoPlace = function(options) {
+    // Default options.
+    options = $.extend({}, {
+      offset: 200,        // * Minimum vertical space (px) btween images.
+      initialOffset: 0,   // * Minimum vertical space (px) before first image.
+      imgSelector: 'img', // * Image selector. Ex: use 'img.foo' to only auto
+                          //   place imgs containing class foo.
+      chunkSelector: ''   // * Ex: 'p'. Images will be placed btween chunks. If
+                          //   set to empty, the element content will be
+                          //   converted to pure text (tags will be removed)
+                          //   and each word will be a chunk.
+    }, options);
 
-    // Extract all images from div and put them on imgs array.
-    $('img', this).each(function(){
-      imgs.push($(this).clone());
-      $(this).remove();
-    })
+    var $img,
+        chunks,
+        index = 0,
+        nextSide = 'left',
+        nextHeight = options.initialOffset,
+        $images = $(options.imgSelector, this).hide(0); // Hide all images.
 
-    if (imgs.length) {
-      // Erase div content.
+    // Define the chunks. Images will be inserted btween chunks.
+    if (options.chunkSelector) {
+      chunks = $(options.chunkSelector, this).hide(0);
+    } else {
+      chunks = this.text().match(/([^ ]+)/g);
+
+      // Clear element, because words will be inserted interactively.
       this.text('');
+    }
 
-      // Reverse imgs array because it will be consumed backwards with pop().
-      imgs.reverse();
+    for (var i = 0; i < chunks.length; i++) {
+      // Place img if div reaches the specified height.
+      if (index < $images.length && this.height() >= nextHeight) {
+        $img = $($images[index++]);
 
-      // Insert word by word into div and intercalates the images.
-      for(i=0; i < words.length; i++) {
-        if(i%100 == 0)
-          console.log(this.height());
-        // Insert img if div reaches the specified height.
-        if (imgs.length && this.height() >= next_height) {
-          $img = imgs.pop();
-          $img.css({
-            'float': side,
-            'display': 'inline-block',
-            'padding': '10px',
-          });
+        $img.css({
+          'float': nextSide,
+          'padding': '10px',
+        });
 
-          // Remove inconvenient padding.
-          //
-          if (side == 'left')
-            $img.css('padding-left', 0);
+        // Remove inconvenient padding.
+        //
+        $img.css('padding-' + nextSide, 0);
 
-          else
-            $img.css('padding-right', 0);
-
-          if (i == 0)
-            $img.css('padding-top', 0);
-
-          // Define the height div must reach to insert next img.
-          next_height = this.height() + $img.height() + offset;
-
-          // Invert side of next img.
-          side = side == 'right' ? 'left' : 'right';
-
-          // Append img to div.
-          this.append($img);
+        if (i === 0) {
+          $img.css('padding-top', 0);
         }
 
-        // Insert one more word to div.
-        this.append(words[i] + ' ');
+        // Place img.
+        if (options.chunkSelector) {
+          $(chunks[i]).before($img.remove().show(0));
+        } else {
+          this.append($img.remove().show(0)).height();
+        }
+
+        // Define the height div must reach to insert next img.
+        nextHeight = this.height() + $img.height() + options.offset;
+
+        // Invert side of next img.
+        nextSide = nextSide == 'right' ? 'left' : 'right';
+      }
+
+      // Insert chunk.
+      if (options.chunkSelector) {
+        $(chunks[i]).show(0);
+      } else {
+        this.append(chunks[i] + ' ');
       }
     }
 

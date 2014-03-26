@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery Image Auto Place Demo</title>
+  <style type="text/css">
+    #container {
+      width: 600px;
+    }
+
+    #content {
+      line-height: 1.5;
+      color: #666;
+      text-align: justify;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="content">
+      <img src="http://placehold.it/200x200" alt="200x200" />
+      <img src="http://placehold.it/200x100" alt="200x100" />
+      <img src="http://placehold.it/300x170" alt="300x170" />
+
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consectetur
+      aliquam ligula in ultrices. Cras a fermentum velit. Maecenas eu iaculis
+      tortor, a accumsan nibh. Duis rutrum turpis vel risus rhoncus, at commodo
+      tellus aliquet. Donec tristique gravida odio. Praesent porta eleifend
+      massa, eu suscipit enim. Proin accumsan sit amet sem ac fringilla.
+      Maecenas at diam lobortis, suscipit dolor in, bibendum nunc.  Vestibulum
+      ut quam bibendum, ornare elit feugiat, ultricies est. Fusce interdum
+      congue nisl, at varius arcu sodales ut. Morbi quis pretium odio, nec
+      blandit arcu. Phasellus ornare risus eget neque accumsan, in aliquam elit
+      gravida. Nam tempor ante accumsan dolor ultricies, vitae convallis massa
+      elementum. In vehicula placerat lectus non sodales. Integer sollicitudin
+      rutrum varius.
+
+      Etiam tincidunt metus neque, non euismod nunc cursus sed. Donec vitae
+      euismod orci. Donec egestas mi at augue tempus ultricies. Proin porttitor
+      enim massa, non cursus urna varius et. Fusce lacinia id purus vitae
+      volutpat. Integer tempor lacus eu ipsum varius, id rhoncus augue auctor.
+      Nunc dignissim eu elit nec scelerisque. Vivamus viverra placerat elit in
+      ullamcorper. Mauris viverra vulputate nisl et porta. Etiam eu porta eros,
+      a placerat enim. Vivamus non tristique dui.
+
+      Vivamus ac augue vel justo dignissim hendrerit. Aliquam erat volutpat.
+      Aenean sed auctor urna, non adipiscing eros. Praesent mattis suscipit
+      massa, sit amet facilisis leo cursus et. Vivamus neque erat, commodo ac
+      elementum vitae, condimentum at diam. Donec accumsan massa tellus, vitae
+      accumsan mauris feugiat et. Nunc lacinia, lacus ut posuere tempor, nisi
+      felis dapibus mi, quis iaculis libero nisl ac erat. Duis dapibus sagittis
+      felis eu bibendum. Nunc quis rutrum justo.
+
+      Fusce dapibus molestie ultrices. Ut malesuada lobortis nulla in
+      hendrerit. Sed aliquet dolor suscipit quam porta interdum. Aliquam
+      scelerisque, neque in molestie aliquam, arcu sapien egestas purus, non
+      cursus dui tortor a nunc. Cras consequat sit amet metus eu pharetra.
+      Fusce at velit id turpis vehicula dignissim. Nullam sodales nunc eget
+      diam dapibus, eget consequat libero tempor.  Suspendisse rhoncus lacinia
+      mattis. Aenean vitae augue quis turpis pretium scelerisque sed vitae
+      erat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed
+      nec tristique sapien, at rutrum velit. Cras tincidunt nisi sit amet velit
+      suscipit ultrices. Donec porttitor cursus leo ac venenatis.
+
+      Vivamus nulla metus, tempus nec metus in, auctor rhoncus diam. Morbi in
+      vestibulum ligula. Proin sem enim, ultrices vitae eros eu, mattis
+      consectetur eros. Nunc sit amet aliquet justo. Sed in erat vitae quam
+      sollicitudin scelerisque eget nec enim. Integer iaculis, metus at
+      lobortis egestas, tortor nisl porta nisl, sit amet imperdiet justo ligula
+      id risus. Praesent sodales ante sed gravida vulputate. Sed at mollis
+      risus. Proin pretium libero ante, vitae congue enim viverra vitae. Nullam
+      blandit a lacus eget ornare. Curabitur sed ligula libero. Ut sodales odio
+      quis suscipit blandit.
+    </div>
+  </div>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="jquery-image-auto-place.min.js"></script>
+  <script type="text/javascript">
+    // XXX: It's very important to use window.load in order to wait all images
+    // to load before the plugin starts.
+    $(window).load(function() {
+      $('#content').imageAutoPlace({offset: 100});
+    });
+  </script>
+</body>
+</html>
