@@ -43,10 +43,11 @@ The above example will rearrange the images to the following layout:
     iaculis scelerisque.
 ```
 
-Options
--------
+Default Options
+---------------
 ```
     {
+      padding: 10,        // * Image padding
       offset: 200,        // * Minimum vertical space (px) btween images.
       initialOffset: 0,   // * Minimum vertical space (px) before first image.
       imgSelector: 'img', // * Image selector. Ex: use 'img.foo' to only auto

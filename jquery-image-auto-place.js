@@ -47,6 +47,7 @@
   $.fn.imageAutoPlace = function(options) {
     // Default options.
     options = $.extend({}, {
+      padding: 10,        // * Image padding
       offset: 200,        // * Minimum vertical space (px) btween images.
       initialOffset: 0,   // * Minimum vertical space (px) before first image.
       imgSelector: 'img', // * Image selector. Ex: use 'img.foo' to only auto
@@ -81,7 +82,7 @@
 
         $img.css({
           'float': nextSide,
-          'padding': '10px',
+          'padding': options.padding + 'px',
         });
 
         // Remove inconvenient padding.
