@@ -63,7 +63,12 @@
         index = 0,
         nextSide = 'left',
         nextHeight = options.initialOffset,
+        originalMinHeight = this.css('min-height'),
         $images = $(options.imgSelector, this).hide(0); // Hide all images.
+
+    // Min height greater than zero causes problems. We'll restore the original
+    // min-height latter.
+    this.css('min-height', 0);
 
     // Define the chunks. Images will be inserted btween chunks.
     if (options.chunkSelector) {
@@ -77,7 +82,7 @@
 
     for (var i = 0; i < chunks.length; i++) {
       // Place img if div reaches the specified height.
-      if (index < $images.length && this.height() >= nextHeight) {
+      if (index < $images.length && this.outerHeight() >= nextHeight) {
         $img = $($images[index++]);
 
         $img.css({
@@ -97,11 +102,11 @@
         if (options.chunkSelector) {
           $(chunks[i]).before($img.remove().show(0));
         } else {
-          this.append($img.remove().show(0)).height();
+          this.append($img.remove().show(0));
         }
 
         // Define the height div must reach to insert next img.
-        nextHeight = this.height() + $img.height() + options.offset;
+        nextHeight = this.outerHeight() + $img.outerHeight() + options.offset;
 
         // Invert side of next img.
         nextSide = nextSide == 'right' ? 'left' : 'right';
@@ -114,6 +119,9 @@
         this.append(chunks[i] + ' ');
       }
     }
+
+    // Restore original min-height.
+    this.css('min-height', originalMinHeight);
 
     return this;
   };
