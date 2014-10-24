@@ -80,7 +80,7 @@
     // XXX: It's very important to use window.load in order to wait all images
     // to load before the plugin starts.
     $(window).load(function() {
-      $('#content').imageAutoPlace({offset: 100});
+      $('#content').imageAutoPlace({offset: 100, loopPattern: ['left', 'right']});
     });
   </script>
 </body>

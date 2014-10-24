@@ -2,8 +2,8 @@ jQuery Image Auto Place
 =======================
 
 jQuery plugin to re-arrange images among a text to provide a magazine like
-layout. The first image is placed on the left side, the second on the right,
-the third on left, and so on.
+layout. For instance, the plugin can be configured to place the first image on
+the left side, the second on the right, the third on left, and so on.
 
 Usage Example
 -------------
@@ -20,7 +20,7 @@ Usage Example
     </div>
 
     <script type="text/javascript">
-      $('#content').imageAutoPlace();
+      $('#content').imageAutoPlace(loopPattern: ['left', 'right']);
     </script>
 ```
 
@@ -47,13 +47,25 @@ Default Options
 ---------------
 ```
     {
-      padding: 10,        // * Image padding
-      offset: 200,        // * Minimum vertical space (px) btween images.
-      initialOffset: 0,   // * Minimum vertical space (px) before first image.
-      imgSelector: 'img', // * Image selector. Ex: use 'img.foo' to only auto
-                          //   place imgs containing class foo.
-      chunkSelector: ''   // * Ex: 'p'. Images will be placed btween chunks. If
-                          //   set to empty, the element content will be
-                          //   converted to pure text (tags will be removed)
-                          //   and each word will be a chunk.
+      // Image padding
+      padding: 10,
+
+      // Minimum vertical space (px) btween images.
+      offset: 200,
+
+      // Minimum vertical space (px) before first image.
+      initialOffset: 0,
+
+      // Image selector. Ex: use 'img.foo' to only auto place imgs containing
+      // class foo.
+      imgSelector: 'img',
+
+      // Ex: 'p'. Images will be placed btween chunks. If set to empty, the
+      // element content will be converted to pure text (tags will be removed)
+      // and each word will be a chunk.
+      chunkSelector: '',
+
+      // Images will be placed in this order. To only use left and right
+      // images, use ['left', 'right'].
+      loopPattern: ['center', 'left', 'right']
     }

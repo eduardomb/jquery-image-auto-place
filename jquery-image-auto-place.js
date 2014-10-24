@@ -3,9 +3,9 @@
 *
 * Author: Eduardo M. Barbosa (eduardobarbosa81@gmail.com).
 *
-* Re-arrange images among a text to provide a magazine like layout. The first
-* image is placed on the left side, the second on the right, the third on left,
-* and so on.
+* Re-arrange images among a text to provide a magazine like layout. For
+* instance, the plugin can be configured to place the first image on the left
+* side, the second on the right, the third on left, and so on.
 *
 * Usage Example:
 *   <div id="content">
@@ -20,7 +20,7 @@
 *   </div>
 *
 *   <script type="text/javascript">
-*     $('#content').imageAutoPlace();
+*     $('#content').imageAutoPlace(loopPattern: ['left', 'right']);
 *   </script>
 *
 * The above example will rearrange the images to the following layout:
@@ -47,21 +47,34 @@
   $.fn.imageAutoPlace = function(options) {
     // Default options.
     options = $.extend({}, {
-      padding: 10,        // * Image padding
-      offset: 200,        // * Minimum vertical space (px) btween images.
-      initialOffset: 0,   // * Minimum vertical space (px) before first image.
-      imgSelector: 'img', // * Image selector. Ex: use 'img.foo' to only auto
-                          //   place imgs containing class foo.
-      chunkSelector: ''   // * Ex: 'p'. Images will be placed btween chunks. If
-                          //   set to empty, the element content will be
-                          //   converted to pure text (tags will be removed)
-                          //   and each word will be a chunk.
+      // Image padding
+      padding: 10,
+
+      // Minimum vertical space (px) btween images.
+      offset: 200,
+
+      // Minimum vertical space (px) before first image.
+      initialOffset: 0,
+
+      // Image selector. Ex: use 'img.foo' to only auto place imgs containing
+      // class foo.
+      imgSelector: 'img',
+
+      // Ex: 'p'. Images will be placed btween chunks. If set to empty, the
+      // element content will be converted to pure text (tags will be removed)
+      // and each word will be a chunk.
+      chunkSelector: '',
+
+      // Images will be placed in this order. To only use left and right
+      // images, use ['left', 'right'].
+      loopPattern: ['center', 'left', 'right']
     }, options);
 
     var $img,
         chunks,
+        position,
+        pad = options.padding + 'px ',
         index = 0,
-        nextSide = 'left',
         nextHeight = options.initialOffset,
         originalMinHeight = this.css('min-height'),
         $images = $(options.imgSelector, this).hide(0); // Hide all images.
@@ -83,17 +96,28 @@
     for (var i = 0; i < chunks.length; i++) {
       // Place img if div reaches the specified height.
       if (index < $images.length && this.outerHeight() >= nextHeight) {
+        position = options.loopPattern[index % options.loopPattern.length];
         $img = $($images[index++]);
 
-        $img.css({
-          'float': nextSide,
-          'padding': options.padding + 'px',
-        });
-
-        // Remove inconvenient padding.
-        //
-        $img.css('padding-' + nextSide, 0);
-
+        // Set padding according to image position.
+        if (position == 'center') {
+          $img.css({
+            // Add padding top if is not the first image and padding bottom.
+            'padding': (i !== 0 ? pad : '0 ') + '0 ' + pad + ' 0'
+          });
+        } else if (position == 'left') {
+          $img.css({
+            // Add padding on all borders, except left.
+            'padding': pad + pad + pad + '0',
+            'float': 'left'
+          });
+        } else {
+          $img.css({
+            // Add padding on all borders, except right.
+            'padding': pad + '0 ' + pad + pad,
+            'float': 'right'
+          });
+        }
         if (i === 0) {
           $img.css('padding-top', 0);
         }
@@ -107,9 +131,6 @@
 
         // Define the height div must reach to insert next img.
         nextHeight = this.outerHeight() + $img.outerHeight() + options.offset;
-
-        // Invert side of next img.
-        nextSide = nextSide == 'right' ? 'left' : 'right';
       }
 
       // Insert chunk.
