@@ -75,7 +75,7 @@
         position,
         pad = options.padding + 'px ',
         index = 0,
-        nextHeight = options.initialOffset,
+        nextH = options.initialOffset,
         originalMinHeight = this.css('min-height'),
         $images = $(options.imgSelector, this).hide(0); // Hide all images.
 
@@ -94,43 +94,49 @@
     }
 
     for (var i = 0; i < chunks.length; i++) {
-      // Place img if div reaches the specified height.
-      if (index < $images.length && this.outerHeight() >= nextHeight) {
-        position = options.loopPattern[index % options.loopPattern.length];
-        $img = $($images[index++]);
+      // Check if there is more images to include.
+      if (index < $images.length) {
+        $img = $($images[index]);
 
-        // Set padding according to image position.
-        if (position == 'center') {
-          $img.css({
-            // Add padding top if is not the first image and padding bottom.
-            'padding': (i !== 0 ? pad : '0 ') + '0 ' + pad + ' 0'
-          });
-        } else if (position == 'left') {
-          $img.css({
-            // Add padding on all borders, except left.
-            'padding': pad + pad + pad + '0',
-            'float': 'left'
-          });
-        } else {
-          $img.css({
-            // Add padding on all borders, except right.
-            'padding': pad + '0 ' + pad + pad,
-            'float': 'right'
-          });
-        }
-        if (i === 0) {
-          $img.css('padding-top', 0);
-        }
+        // Place img if div reaches the specified height and if the remaining
+        // space is enough, or if it is the first image.
+        if (this.outerHeight() >= nextH + $img.outerHeight() || nextH === 0) {
+          position = options.loopPattern[index % options.loopPattern.length];
+          index++;
 
-        // Place img.
-        if (options.chunkSelector) {
-          $(chunks[i]).before($img.remove().show(0));
-        } else {
-          this.append($img.remove().show(0));
-        }
+          // Set padding according to image position.
+          if (position == 'center') {
+            $img.css({
+              // Add padding top if is not the first image and padding bottom.
+              'padding': (i !== 0 ? pad : '0 ') + '0 ' + pad + ' 0'
+            });
+          } else if (position == 'left') {
+            $img.css({
+              // Add padding on all borders, except left.
+              'padding': pad + pad + pad + '0',
+              'float': 'left'
+            });
+          } else {
+            $img.css({
+              // Add padding on all borders, except right.
+              'padding': pad + '0 ' + pad + pad,
+              'float': 'right'
+            });
+          }
+          if (i === 0) {
+            $img.css('padding-top', 0);
+          }
 
-        // Define the height div must reach to insert next img.
-        nextHeight = this.outerHeight() + $img.outerHeight() + options.offset;
+          // Place img.
+          if (options.chunkSelector) {
+            $(chunks[i]).before($img.remove().show(0));
+          } else {
+            this.append($img.remove().show(0));
+          }
+
+          // Define the height div must reach to insert next img.
+          nextH = this.outerHeight() + $img.outerHeight() + options.offset;
+        }
       }
 
       // Insert chunk.
